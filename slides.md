@@ -11,16 +11,16 @@
 # If you need homebrew
 ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
-# You might need to add this line to your `~/.bashrc`:
-eval "$(rbenv init -)"
-
 brew install rbenv ruby-build
 rbenv install 2.0.0-p451
 rbenv global 2.0.0-p451
 brew install rbenv-gem-rehash
 gem install bundler
-```
 
+# You might need to add this line to your `~/.bashrc` (or ~/.zshrc if you
+# use zsh) and restart your terminal session
+eval "$(rbenv init -)"
+```
 
 !SLIDE
 ## Syntax
@@ -30,17 +30,35 @@ gem install bundler
 
 ```ruby
 def some_method
-  puts 'hello'
+  'hello'
 end
 
 some_method # => 'hello'
 method(:some_method).call # => 'hello'
 ```
+
+!SLIDE
+### return from methods is implicit
+
+```ruby
+def something
+  'value'
+end
+something # => 'value'
+
+def get_last_name(first_name)
+  if first_name == 'John'
+    'Smith'
+  end
+end
+get_last_name('Bob') # => nil
+```
+
 !SLIDE
 ### "Everything is an object"
 
 ```ruby
-3.times {|num| puts num + 1 }  # => 1 # => 2 #=> 3
+3.times {|num| num + 1 }  # => 1 # => 2 #=> 3
 "foo".upcase # => 'FOO'
 nil.nil?
 nil.object_id #=> 8
@@ -83,9 +101,9 @@ a_symbol = :foo
 
 ```ruby
 def do_something
-  puts 'something before'
+  'something before'
   yield 'hi' if block_given?
-  puts 'something after'
+  'something after'
 end
 
 do_something { |something| "something in between: #{something.upcase}" }
@@ -97,7 +115,7 @@ def pass_the_block(&block)
   block
 end
 
-the_block = pass_the_block { puts "I'm the block" }
+the_block = pass_the_block { "I'm the block" }
 the_block.call # => I'm the block
 ```
 
@@ -109,12 +127,12 @@ times_3 = Proc.new { |num| num * 3 }
 times_3.call(4) # => 12
 
 def do_something
-  puts 'something before'
+  'something before'
   yield 4
-  puts 'something after'
+  'something after'
 end
 
-do_something(&times_3) # => 12
+do_something(& times_3) # => 12
 ```
 
 !SLIDE
@@ -131,7 +149,7 @@ do_something(&times_3) # => 12
 ```ruby
 class Foo
   def blah
-    puts 'blah'
+    'blah'
   end
 end
 
@@ -141,7 +159,7 @@ Foo.ancestors # => [Foo, Object, Kernel, BasicObject]
 
 bar = Class.new('Bar') do
   def bar
-    puts 'bar'
+    'bar'
   end
 end
 
@@ -155,7 +173,7 @@ bar.name # => Bar
 ```ruby
 class Foo
   def blah
-    puts 'bar'
+    'bar'
   end
 end
 
@@ -164,7 +182,7 @@ foo.blah # => 'bar'
 
 class Foo
   def blah
-    puts 'baz'
+    'baz'
   end
 end
 
@@ -176,13 +194,13 @@ foo.blah # => 'baz'
 ```ruby
 class Foo
   def blah
-    puts 'bar'
+    'bar'
   end
 end
 
 foo = Foo.new
 def foo.blah
-  puts 'za'
+  'za'
 end
 
 foo.blah # => 'za'
@@ -196,12 +214,12 @@ foo.singleton_class.methods(true) # => [:baz]
 class Foo
   class << self
     def blah
-      puts 'ha-chah-chah'
+      'ha-chah-chah'
     end
   end
 
   def self.bar
-    puts 'tarala'
+    'tarala'
   end
 end
 
@@ -221,6 +239,7 @@ Foo.singleton_methods # => [:blah, :bar]
 
 !SLIDE
 ## Culture
+
 - A lot of people come from non-CS backgrounds, a lot of code camps these days
 - Cool to be interested in other languages, a lot of angst about what other
   languages have
@@ -228,6 +247,7 @@ Foo.singleton_methods # => [:blah, :bar]
 - Like to create DSLs (see rspec below)
 - "Convention over configuration"
 - "Duck typing"
+- "Metaprogramming"
 
 !SLIDE
 ### "Convention over configuration"
